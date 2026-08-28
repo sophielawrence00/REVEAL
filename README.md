@@ -62,8 +62,7 @@ ROOT_DIR/
 ├── mGlyR_3/
 ├── mGlyR_Glycine_1/            ← protein=mGlyR, condition=Glycine, rep=1
 ├── mGluR2_1/
-├── mGluR2_Glut_1/              
-├── AmtB_BrainLipids_1/
+├── mGluR2_Glut_1/
 ├── mGlyR_MS1.txt                ← MS1 envelope for mGlyR apo
 ├── mGlyR_Glycine_MS1.txt        
 ├── mGluR2_Glutamate_MS1.txt     
