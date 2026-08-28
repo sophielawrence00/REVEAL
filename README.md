@@ -1,4 +1,4 @@
-# REVEAL — Lipid Binder Classification Pipeline
+# REVEAL Lipid Binder Classification Pipeline
 
 Three scripts that together identify which lipids bind a given membrane
 protein, by correlating each lipid's reconstructed MS2 precursor spectrum following application of REVEAL against the MS1 envelope and cross-checking the result against signal-to-noise data. All spectral input data (per-lipid MS2 reconstructions and MS1 envelopes) is stored as individual tab-separated text files, one per sample/lipid.
