@@ -3,22 +3,25 @@
 Three python scripts that help analyse the data from the REVEAL wrokflow. These scripts correlate each lipid's reconstructed MS2 precursor spectrum (following application of REVEAL) against the MS1 envelope and cross-check the result against signal-to-noise data. All spectral input data (per-lipid MS2 reconstructions and MS1 envelopes) is unnornmalised and stored as individual tab-separated text files, one per sample/lipid.
 
 ## Pipeline overview
-Edit the path variables (`SNR_XLSX`, `ROOT_DIR`, etc.) at the top of each script to match the data locations.
+Out of the box all three scripts point at the bundled `Example Data/` folder, so they can be
+run as-is to reproduce the AmtB example. Paths are resolved relative to each script, so the
+scripts can be run from any working directory. To use your own data, edit the `DATA_DIR` /
+`ROOT_DIR` variable at the top of each script.
 
-Run the scripts in this order:
+Run the scripts in filename order:
 
 ```
-1. build_snr_table.py
+01_build_snr_table.py
         │  snr_data.xlsx  →  snr_long.csv
         ▼
-2. REVEAL_pearson_vs_MS1_permutateAllSamples.py
+02_pearson_vs_ms1.py
         │  raw lipid .txt files + MS1 .txt files + Master.csv
         ▼  →  {protein}_pearson_results.csv, heatmaps, r-distributions
-3. make_scatter.py
+03_classify_binders.py
            snr_long.csv + {protein}_pearson_results.csv
            →  r-vs-SNR scatter plots, binder count charts, confident_binders.xlsx
 ```
-## 1. `build_snr_table.py`
+## `01_build_snr_table.py`
 
 Averages replicate signal-to-noise ratio (SNR) columns per lipid/condition
 from an Excel sheet and writes a tidy long-format CSV. For each lipid's reconstructed precursor
@@ -26,7 +29,7 @@ spectrum, the SNR is calculated by taking the unnormalised area under
 the curve in the m/z region where the expected MS1 signal should fall, and comparing it to the area under the curve in an
 m/z region where no MS1 signal is expected. This per-replicate SNR value is calculated manually
 (not by any script in this repo) and provided as input in `snr_data.xlsx`.
-`build_snr_table.py` then averages the replicate SNR values for each
+`01_build_snr_table.py` then averages the replicate SNR values for each
 lipid/condition to produce one mean SNR per lipid/condition, which is used
 downstream as a data-quality filter alongside the Pearson r classification.
 
@@ -36,7 +39,7 @@ or `{protein}_{rep}` for the apo condition (e.g. `mGlyR_1`).
 
 **Output:** `snr_long.csv` with columns `mz_key, protein, condition, snr_mean`.
 
-## 2. `REVEAL_pearson_vs_MS1_permutateAllSamples.py`
+## `02_pearson_vs_ms1.py`
 
 Auto-discovers protein/condition/replicate experiments
 from subfolder names, averages each lipid's replicate reconstructed MS2
@@ -76,15 +79,15 @@ ROOT_DIR/
    * `{protein}_{condition}_r_distribution.pdf` - histogram with threshold line
    * `{protein}_pearson_results.csv` - full results table (wide format, one row per lipid)
 
-## 3. `make_scatter.py`
+## `03_classify_binders.py`
 
-Merges the Pearson r results from script 2 with the SNR table from
-script 1, and classifies "confident binders" as lipids with
+Merges the Pearson r results from script 02 with the SNR table from
+script 01, and classifies "confident binders" as lipids with
 **r > threshold AND SNR > 3**. 
 
 **Inputs:**
-* `{protein}_pearson_results.csv` files (from script 2)
-* `snr_long.csv` (from script 1)
+* `{protein}_pearson_results.csv` files (from script 02)
+* `snr_long.csv` (from script 01)
 
 **Output**, written to `RESULTS_DIR`:
 * `{protein}_r_vs_snr_scatter.pdf` - scatter plot of r vs SNR, coloured by condition, with threshold lines
@@ -95,6 +98,6 @@ script 1, and classifies "confident binders" as lipids with
 ## Notes
 
 * All plots are saved as high-resolution (300 dpi) PDFs.
-* `REVEAL_pearson_vs_MS1_permutateAllSamples.py` uses a fixed random seed (`seed=42`) for the permutation test, so results are reproducible between runs on the same data.
+* `02_pearson_vs_ms1.py` uses a fixed random seed (`seed=42`) for the permutation test, so results are reproducible between runs on the same data.
 * Lipids with an ambiguous name-to-mz mapping (more than one candidate name in `Master.csv`) are flagged with a trailing `*` in heatmap labels.
 

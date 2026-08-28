@@ -11,7 +11,10 @@ import matplotlib.pyplot as plt
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill
 
-ROOT_DIR   = r"DIA_DIR"   # <-- update if needed
+# Paths are resolved relative to this script, so it can be run from any directory.
+BASE_DIR    = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR    = os.path.join(BASE_DIR, "Example Data")   # <-- point this at your data folder
+
 RESULTS_DIR = os.path.join(ROOT_DIR, "REVEAL_correlation_output")
 SNR_CSV     = os.path.join(ROOT_DIR, "snr_long.csv")
 SNR_CUTOFF  = 3.0

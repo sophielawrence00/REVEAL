@@ -3,18 +3,24 @@ Averages replicate SNR columns per lipid/condition from the SNR Excel sheet,
 expands abbreviated condition names to match REVEAL's naming, and writes
 a tidy CSV: mz_key, protein, condition, snr_mean
 """
+import os
 import pandas as pd
 import re
 
-SNR_XLSX = "snr_data.xlsx"     # <-- update path if needed
-OUT_CSV  = "snr_long.csv"
+# Paths are resolved relative to this script, so it can be run from any directory.
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "Example Data")   # <-- point this at your data folder
+
+SNR_XLSX = os.path.join(DATA_DIR, "snr_data.xlsx")
+OUT_CSV  = os.path.join(DATA_DIR, "snr_long.csv")
 
 df = pd.read_excel(SNR_XLSX, sheet_name=0)
 df = df.rename(columns={df.columns[0]: "mz_key"})
 
 # Parse each replicate column name into (protein, condition, rep)
-# Expects full condition names already, e.g. mGlyR_Glutamate_1, mGlyR_1 (apo)
-col_pattern = re.compile(r"^(?P<protein>mGlyR|mGluR2)_(?:(?P<cond>[A-Za-z]+)_)?(?P<rep>\d+)$")
+# Expects full condition names already, e.g. mGlyR_Glutamate_1, mGlyR_1 (apo),
+# AmtB_BrainLipids_1. Any protein name is accepted, not a fixed list.
+col_pattern = re.compile(r"^(?P<protein>[A-Za-z0-9]+)_(?:(?P<cond>[A-Za-z0-9]+)_)?(?P<rep>\d+)$")
 
 groups = {}  # (protein, condition) -> list of column names
 for col in df.columns[1:]:
