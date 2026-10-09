@@ -1,7 +1,7 @@
 """
-Averages replicate SNR columns per lipid/condition from the SNR Excel sheet,
+Takes the median of replicate SNR columns per lipid/condition from the SNR Excel sheet,
 expands abbreviated condition names to match REVEAL's naming, and writes
-a tidy CSV: mz_key, protein, condition, snr_mean
+a tidy CSV: mz_key, protein, condition, snr_median
 """
 import os
 import pandas as pd
