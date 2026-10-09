@@ -34,11 +34,11 @@ for col in df.columns[1:]:
 
 rows = []
 for (protein, cond), cols in groups.items():
-    mean_snr = df[cols].mean(axis=1, skipna=True)
-    for mz_key, val in zip(df["mz_key"], mean_snr):
+    median_snr = df[cols].median(axis=1, skipna=True)
+    for mz_key, val in zip(df["mz_key"], median_snr):
         if pd.isna(val):
             continue
-        rows.append({"mz_key": mz_key, "protein": protein, "condition": cond, "snr_mean": val})
+        rows.append({"mz_key": mz_key, "protein": protein, "condition": cond, "snr_median": val})
 
 out = pd.DataFrame(rows)
 out.to_csv(OUT_CSV, index=False)
