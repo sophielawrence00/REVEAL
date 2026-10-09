@@ -23,21 +23,21 @@ Run the scripts in filename order:
 ```
 ## `01_build_snr_table.py`
 
-Averages replicate signal-to-noise ratio (SNR) columns per lipid/condition
+Takes the mean replicate signal-to-noise ratio (SNR) columns per lipid/condition
 from an Excel sheet and writes a tidy long-format CSV. For each lipid's reconstructed precursor
 spectrum, the SNR is calculated by taking the unnormalised area under
 the curve in the m/z region where the expected MS1 signal should fall, and comparing it to the area under the curve in an
 m/z region where no MS1 signal is expected. This per-replicate SNR value is calculated manually
 (not by any script in this repo) and provided as input in `snr_data.xlsx`.
 `01_build_snr_table.py` then averages the replicate SNR values for each
-lipid/condition to produce one mean SNR per lipid/condition, which is used
+lipid/condition to produce one median SNR per lipid/condition, which is used
 downstream as a data-quality filter alongside the Pearson r classification.
 
 **Input:** `snr_data.xlsx` - first column is the lipid `mz_key`; remaining
 columns are named `{protein}_{condition}_{rep}` (e.g. `mGlyR_Glutamate_1`)
 or `{protein}_{rep}` for the apo condition (e.g. `mGlyR_1`).
 
-**Output:** `snr_long.csv` with columns `mz_key, protein, condition, snr_mean`.
+**Output:** `snr_long.csv` with columns `mz_key, protein, condition, snr_median`.
 
 ## `02_pearson_vs_ms1.py`
 
