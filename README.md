@@ -23,7 +23,7 @@ Run the scripts in filename order:
 ```
 ## `01_build_snr_table.py`
 
-Takes the mean replicate signal-to-noise ratio (SNR) columns per lipid/condition
+Takes the median replicate signal-to-noise ratio (SNR) columns per lipid/condition
 from an Excel sheet and writes a tidy long-format CSV. For each lipid's reconstructed precursor
 spectrum, the SNR is calculated by taking the unnormalised area under
 the curve in the m/z region where the expected MS1 signal should fall, and comparing it to the area under the curve in an
